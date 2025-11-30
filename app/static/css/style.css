@@ -1,0 +1,178 @@
+:root {
+    --bg-color: #ffffff;
+    --text-color: #333333;
+    --panel-bg: #ffffff;
+    --panel-border: #dddddd;
+    --panel-heading-bg: #f5f5f5;
+    --panel-heading-text: #333333;
+    --navbar-bg: #f8f8f8;
+    --navbar-border: #e7e7e7;
+    --navbar-text: #777777;
+    --navbar-link-hover: #333333;
+    --navbar-link-active-bg: #e7e7e7;
+    --link-color: #337ab7;
+    --modal-bg: #ffffff;
+    --modal-header-border: #e5e5e5;
+    --input-bg: #ffffff;
+    --input-border: #ccc;
+    --input-text: #555;
+}
+
+@media (prefers-color-scheme: dark) {
+    :root {
+        --bg-color: #121212;
+        --text-color: #e0e0e0;
+        --panel-bg: #1e1e1e;
+        --panel-border: #333333;
+        --panel-heading-bg: #2d2d2d;
+        --panel-heading-text: #e0e0e0;
+        --navbar-bg: #1e1e1e;
+        --navbar-border: #333333;
+        --navbar-text: #aaaaaa;
+        --navbar-link-hover: #ffffff;
+        --navbar-link-active-bg: #333333;
+        --link-color: #58a6ff;
+        --modal-bg: #1e1e1e;
+        --modal-header-border: #333333;
+        --input-bg: #2d2d2d;
+        --input-border: #444;
+        --input-text: #e0e0e0;
+    }
+}
+
+body {
+    background-color: var(--bg-color);
+    color: var(--text-color);
+}
+
+/* Navbar Overrides */
+.navbar-default {
+    background-color: var(--navbar-bg);
+    border-color: var(--navbar-border);
+}
+.navbar-default .navbar-brand {
+    color: var(--navbar-text);
+}
+.navbar-default .navbar-brand:hover,
+.navbar-default .navbar-brand:focus {
+    color: var(--navbar-link-hover);
+}
+.navbar-default .navbar-nav > li > a {
+    color: var(--navbar-text);
+}
+.navbar-default .navbar-nav > li > a:hover,
+.navbar-default .navbar-nav > li > a:focus {
+    color: var(--navbar-link-hover);
+}
+.navbar-default .navbar-nav > .active > a, 
+.navbar-default .navbar-nav > .active > a:hover, 
+.navbar-default .navbar-nav > .active > a:focus {
+    color: var(--navbar-link-hover);
+    background-color: var(--navbar-link-active-bg);
+}
+.navbar-default .navbar-toggle {
+    border-color: var(--navbar-border);
+}
+.navbar-default .navbar-toggle:hover,
+.navbar-default .navbar-toggle:focus {
+    background-color: var(--navbar-link-active-bg);
+}
+.navbar-default .navbar-toggle .icon-bar {
+    background-color: var(--navbar-text);
+}
+.navbar-default .navbar-collapse, .navbar-default .navbar-form {
+    border-color: var(--navbar-border);
+}
+
+/* Panel Overrides */
+.panel-default {
+    border-color: var(--panel-border);
+    background-color: var(--panel-bg);
+}
+.panel-default > .panel-heading {
+    color: var(--panel-heading-text);
+    background-color: var(--panel-heading-bg);
+    border-color: var(--panel-border);
+}
+.panel-default > .panel-footer {
+    background-color: var(--panel-heading-bg);
+    border-top-color: var(--panel-border);
+}
+
+/* Panel Info Overrides for Dark Mode */
+@media (prefers-color-scheme: dark) {
+    .panel-info {
+        border-color: #0c5460;
+        background-color: var(--panel-bg);
+    }
+    .panel-info > .panel-heading {
+        background-color: #0c5460;
+        color: #d1ecf1;
+        border-color: #0c5460;
+    }
+}
+
+/* Modal Overrides */
+.modal-content {
+    background-color: var(--modal-bg);
+    border: 1px solid var(--panel-border);
+    box-shadow: 0 5px 15px rgba(0,0,0,0.5);
+}
+.modal-header {
+    border-bottom-color: var(--modal-header-border);
+}
+.modal-footer {
+    border-top-color: var(--modal-header-border);
+}
+.close {
+    color: var(--text-color);
+    text-shadow: none;
+    opacity: 0.6;
+}
+.close:hover {
+    color: var(--text-color);
+    opacity: 1;
+}
+
+/* Links */
+a {
+    color: var(--link-color);
+}
+a:hover, a:focus {
+    color: var(--link-color);
+    text-decoration: underline;
+    opacity: 0.8;
+}
+
+/* Carousel Indicators */
+.carousel-indicators li {
+    border-color: var(--text-color);
+}
+.carousel-indicators .active {
+    background-color: var(--text-color);
+}
+
+/* Form Controls */
+.form-control {
+    background-color: var(--input-bg);
+    border-color: var(--input-border);
+    color: var(--input-text);
+}
+.form-control:focus {
+    border-color: var(--link-color);
+    background-color: var(--input-bg);
+    color: var(--input-text);
+}
+
+/* Image borders in dark mode */
+@media (prefers-color-scheme: dark) {
+    .img-thumbnail, .img-circle {
+        border-color: var(--panel-border);
+        background-color: var(--panel-bg);
+    }
+}
+
+/* Profile Image */
+.profile-img {
+    border: 5px solid var(--navbar-bg); /* Use navbar bg color which is light grey in light mode */
+}

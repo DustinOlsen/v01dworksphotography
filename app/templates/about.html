@@ -40,7 +40,7 @@
                 <div class="panel-body text-center">
                     {% if profile %}
                         {% if profile.image_filename %}
-                            <img src="{{ url_for('uploaded_file', filename=profile.image_filename) }}" class="img-circle" style="width: 200px; height: 200px; object-fit: cover; margin-bottom: 20px; border: 5px solid #f8f8f8; box-shadow: 0 2px 5px rgba(0,0,0,0.1);">
+                            <img src="{{ url_for('uploaded_file', filename=profile.image_filename) }}" class="img-circle profile-img" style="width: 200px; height: 200px; object-fit: cover; margin-bottom: 20px; box-shadow: 0 2px 5px rgba(0,0,0,0.1);">
                         {% endif %}
                         
                         {% if profile.bio %}

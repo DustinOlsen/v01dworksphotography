@@ -8,7 +8,6 @@
                 <h3 class="panel-title">{{ post.title }}</h3>
             </div>
             <div class="panel-body">
-                <p>{{ post.body }}</p>
                 
                 {% if post.image_filename %}
                 <div class="row" style="margin-bottom: 20px;">
@@ -109,6 +108,7 @@
                 </div>
                 {% endif %}
                 
+                <p style="margin-top: 20px;">{{ post.body }}</p>
                 <p><small class="text-muted">Posted on {{ post.timestamp.strftime('%Y-%m-%d') }}</small></p>
             </div>
         </div>
