@@ -1,60 +1,93 @@
 {% extends "base.html" %}
 
 {% block content %}
+    <style>
+        .btn-social {
+            color: white !important;
+            border: none;
+            transition: all 0.3s;
+            margin: 5px;
+            width: 60px;
+            height: 60px;
+            border-radius: 8px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 28px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+        .btn-social:hover {
+            opacity: 0.9;
+            transform: translateY(-3px);
+            box-shadow: 0 6px 8px rgba(0,0,0,0.15);
+        }
+        .btn-email { background-color: #D44638; }
+        .btn-website { background-color: #333333; }
+        .btn-instagram { background: radial-gradient(circle at 30% 107%, #fdf497 0%, #fdf497 5%, #fd5949 45%, #d6249f 60%, #285AEB 90%); }
+        .btn-facebook { background-color: #1877F2; }
+        .btn-threads { background-color: #000000; }
+        .btn-bluesky { background-color: #0560FF; }
+        .btn-mastodon { background-color: #6364FF; }
+        .btn-x { background-color: #000000; }
+        .btn-linkedin { background-color: #0077B5; }
+        .btn-youtube { background-color: #FF0000; }
+        .btn-tiktok { background-color: #000000; }
+    </style>
+
     <div class="row">
         <div class="col-md-8 col-md-offset-2">
             <div class="panel panel-default">
                 <div class="panel-body text-center">
                     {% if profile %}
                         {% if profile.image_filename %}
-                            <img src="{{ url_for('uploaded_file', filename=profile.image_filename) }}" class="img-circle" style="width: 200px; height: 200px; object-fit: cover; margin-bottom: 20px;">
+                            <img src="{{ url_for('uploaded_file', filename=profile.image_filename) }}" class="img-circle" style="width: 200px; height: 200px; object-fit: cover; margin-bottom: 20px; border: 5px solid #f8f8f8; box-shadow: 0 2px 5px rgba(0,0,0,0.1);">
                         {% endif %}
                         
                         {% if profile.bio %}
-                            <p class="lead">{{ profile.bio }}</p>
+                            <p class="lead" style="margin: 20px 0;">{{ profile.bio }}</p>
                         {% endif %}
                         
                         <hr>
                         
-                        <div class="social-links" style="font-size: 24px;">
+                        <div class="social-links">
                             {% if profile.email %}
-                                <a href="mailto:{{ profile.email }}" class="btn btn-default btn-lg" title="Email" style="margin: 5px;"><i class="fas fa-envelope"></i></a>
+                                <a href="mailto:{{ profile.email }}" class="btn btn-social btn-email" title="Email"><i class="fas fa-envelope"></i></a>
                             {% endif %}
                             {% if profile.website %}
-                                <a href="{{ profile.website }}" target="_blank" class="btn btn-default btn-lg" title="Website" style="margin: 5px;"><i class="fas fa-globe"></i></a>
+                                <a href="{{ profile.website }}" target="_blank" class="btn btn-social btn-website" title="Website"><i class="fas fa-globe"></i></a>
                             {% endif %}
                             {% if profile.instagram %}
-                                <a href="{{ profile.instagram }}" target="_blank" class="btn btn-default btn-lg" title="Instagram" style="margin: 5px;"><i class="fab fa-instagram"></i></a>
+                                <a href="{{ profile.instagram }}" target="_blank" class="btn btn-social btn-instagram" title="Instagram"><i class="fab fa-instagram"></i></a>
                             {% endif %}
                             {% if profile.facebook %}
-                                <a href="{{ profile.facebook }}" target="_blank" class="btn btn-default btn-lg" title="Facebook" style="margin: 5px;"><i class="fab fa-facebook"></i></a>
+                                <a href="{{ profile.facebook }}" target="_blank" class="btn btn-social btn-facebook" title="Facebook"><i class="fab fa-facebook"></i></a>
                             {% endif %}
                             {% if profile.threads %}
-                                <a href="{{ profile.threads }}" target="_blank" class="btn btn-default btn-lg" title="Threads" style="margin: 5px;"><i class="fab fa-threads"></i></a>
+                                <a href="{{ profile.threads }}" target="_blank" class="btn btn-social btn-threads" title="Threads"><i class="fab fa-threads"></i></a>
                             {% endif %}
                             {% if profile.bluesky %}
-                                <a href="{{ profile.bluesky }}" target="_blank" class="btn btn-default btn-lg" title="Bluesky" style="margin: 5px;"><i class="fas fa-cloud"></i></a>
+                                <a href="{{ profile.bluesky }}" target="_blank" class="btn btn-social btn-bluesky" title="Bluesky"><i class="fab fa-bluesky"></i></a>
                             {% endif %}
                             {% if profile.mastodon %}
-                                <a href="{{ profile.mastodon }}" target="_blank" class="btn btn-default btn-lg" title="Mastodon" style="margin: 5px;"><i class="fab fa-mastodon"></i></a>
+                                <a href="{{ profile.mastodon }}" target="_blank" class="btn btn-social btn-mastodon" title="Mastodon"><i class="fab fa-mastodon"></i></a>
                             {% endif %}
                             {% if profile.x %}
-                                <a href="{{ profile.x }}" target="_blank" class="btn btn-default btn-lg" title="X" style="margin: 5px;"><i class="fab fa-x-twitter"></i></a>
+                                <a href="{{ profile.x }}" target="_blank" class="btn btn-social btn-x" title="X"><i class="fab fa-x-twitter"></i></a>
                             {% endif %}
                             {% if profile.linkedin %}
-                                <a href="{{ profile.linkedin }}" target="_blank" class="btn btn-default btn-lg" title="LinkedIn" style="margin: 5px;"><i class="fab fa-linkedin"></i></a>
+                                <a href="{{ profile.linkedin }}" target="_blank" class="btn btn-social btn-linkedin" title="LinkedIn"><i class="fab fa-linkedin"></i></a>
                             {% endif %}
                             {% if profile.youtube %}
-                                <a href="{{ profile.youtube }}" target="_blank" class="btn btn-default btn-lg" title="YouTube" style="margin: 5px;"><i class="fab fa-youtube"></i></a>
+                                <a href="{{ profile.youtube }}" target="_blank" class="btn btn-social btn-youtube" title="YouTube"><i class="fab fa-youtube"></i></a>
                             {% endif %}
                             {% if profile.tiktok %}
-                                <a href="{{ profile.tiktok }}" target="_blank" class="btn btn-default btn-lg" title="TikTok" style="margin: 5px;"><i class="fab fa-tiktok"></i></a>
+                                <a href="{{ profile.tiktok }}" target="_blank" class="btn btn-social btn-tiktok" title="TikTok"><i class="fab fa-tiktok"></i></a>
                             {% endif %}
                         </div>
                         
                         {% if profile.kofi %}
                             <hr>
-                            <a href="{{ profile.kofi }}" target="_blank" class="btn btn-primary btn-lg" style="background-color: #29abe0; border-color: #29abe0; margin-top: 10px;">
+                            <a href="{{ profile.kofi }}" target="_blank" class="btn btn-primary btn-lg" style="background-color: #29abe0; border-color: #29abe0; margin-top: 10px; border-radius: 30px; padding: 10px 30px;">
                                 <i class="fas fa-coffee"></i> Support me on Ko-fi
                             </a>
                         {% endif %}
