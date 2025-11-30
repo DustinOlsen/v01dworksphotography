@@ -1,0 +1,86 @@
+{% extends 'admin/model/edit.html' %}
+
+{% block tail %}
+    {{ super() }}
+    <script src="https://cdn.jsdelivr.net/npm/exif-js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Function to handle file input changes
+            function handleFileInput(input) {
+                input.addEventListener('change', function(e) {
+                    var file = e.target.files[0];
+                    if (file && file.type === "image/jpeg") {
+                        EXIF.getData(file, function() {
+                            var row = $(input).closest('.form-inline, .form-group').parent().closest('tr, .inline-field');
+                            if (row.length === 0) {
+                                // Fallback for non-inline or different structure
+                                row = $(input).closest('form'); 
+                            }
+                            
+                            // Helper to find input by partial name suffix
+                            function setField(suffix, value) {
+                                if (!value) return;
+                                var field = row.find('input[id$="-' + suffix + '"]');
+                                if (field.length) field.val(value);
+                            }
+
+                            // Date Taken
+                            var dateTaken = EXIF.getTag(this, "DateTimeOriginal");
+                            if (dateTaken) {
+                                // Format: "2023:10:27 10:00:00" -> "2023-10-27 10:00:00"
+                                // Note: Flask-Admin date format might vary, usually YYYY-MM-DD HH:MM:SS
+                                var formattedDate = dateTaken.replace(/^(\d{4}):(\d{2}):(\d{2})/, '$1-$2-$3');
+                                setField('date_taken', formattedDate);
+                            }
+
+                            // Camera
+                            setField('camera_make', EXIF.getTag(this, "Make"));
+                            setField('camera_model', EXIF.getTag(this, "Model"));
+                            setField('lens', EXIF.getTag(this, "LensModel"));
+                            
+                            // Settings
+                            var focal = EXIF.getTag(this, "FocalLength");
+                            if (focal) setField('focal_length', focal + "mm");
+                            
+                            var fnumber = EXIF.getTag(this, "FNumber");
+                            if (fnumber) setField('aperture', "f/" + fnumber);
+                            
+                            var exposure = EXIF.getTag(this, "ExposureTime");
+                            if (exposure) {
+                                // Convert decimal to fraction if needed, but simple string is often fine
+                                if (exposure < 1 && exposure > 0) {
+                                     setField('shutter_speed', "1/" + Math.round(1/exposure) + "s");
+                                } else {
+                                     setField('shutter_speed', exposure + "s");
+                                }
+                            }
+                            
+                            var iso = EXIF.getTag(this, "ISOSpeedRatings");
+                            if (iso) setField('iso', iso);
+
+                            // Location (Basic Lat/Lon extraction for now, reverse geocoding requires API)
+                            // We'll leave location blank for server-side to fill with nice address
+                            // unless we want to put raw coords.
+                        });
+                    }
+                });
+            }
+
+            // Attach to existing inputs
+            $('input[type="file"]').each(function() {
+                handleFileInput(this);
+            });
+
+            // Attach to new inputs added by Flask-Admin inline models
+            // Flask-Admin triggers a custom event or we can observe DOM
+            // Simple hack: listen to click on "Add" button
+            $(document).on('click', '.fa-plus-circle, .btn-primary', function() {
+                setTimeout(function() {
+                    $('input[type="file"]').off('change').each(function() {
+                        handleFileInput(this);
+                    });
+                }, 500);
+            });
+        });
+    </script>
+{% endblock %}

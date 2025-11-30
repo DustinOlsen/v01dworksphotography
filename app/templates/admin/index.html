@@ -1,0 +1,32 @@
+{% extends 'admin/master.html' %}
+
+{% block body %}
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-md-12">
+            <h1>Dashboard</h1>
+            <p class="lead">Welcome to your photography blog admin panel.</p>
+            <a href="{{ url_for('index') }}" class="btn btn-primary">View Public Site</a>
+            <hr>
+            <h3>Recent Posts</h3>
+            {% if dashboard_posts %}
+            <div class="list-group">
+                {% for post in dashboard_posts %}
+                <div class="list-group-item">
+                    <h4 class="list-group-item-heading">{{ post.title }} <small>{{ post.timestamp.strftime('%Y-%m-%d') }}</small></h4>
+                    <p class="list-group-item-text">{{ post.body[:200] }}...</p>
+                    <br>
+                    {% if post.image_filename %}
+                    <img src="{{ url_for('uploaded_file', filename=post.image_filename) }}" style="height: 50px;">
+                    {% endif %}
+                    <a href="{{ url_for('post.edit_view', id=post.id) }}" class="btn btn-xs btn-default">Edit</a>
+                </div>
+                {% endfor %}
+            </div>
+            {% else %}
+            <p>No posts yet.</p>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}

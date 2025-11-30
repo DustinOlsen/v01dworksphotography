@@ -1,0 +1,69 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <div class="row">
+        <div class="col-md-8 col-md-offset-2">
+            <div class="panel panel-default">
+                <div class="panel-body text-center">
+                    {% if profile %}
+                        {% if profile.image_filename %}
+                            <img src="{{ url_for('uploaded_file', filename=profile.image_filename) }}" class="img-circle" style="width: 200px; height: 200px; object-fit: cover; margin-bottom: 20px;">
+                        {% endif %}
+                        
+                        {% if profile.bio %}
+                            <p class="lead">{{ profile.bio }}</p>
+                        {% endif %}
+                        
+                        <hr>
+                        
+                        <div class="social-links" style="font-size: 24px;">
+                            {% if profile.email %}
+                                <a href="mailto:{{ profile.email }}" class="btn btn-default btn-lg" title="Email" style="margin: 5px;"><i class="fas fa-envelope"></i></a>
+                            {% endif %}
+                            {% if profile.website %}
+                                <a href="{{ profile.website }}" target="_blank" class="btn btn-default btn-lg" title="Website" style="margin: 5px;"><i class="fas fa-globe"></i></a>
+                            {% endif %}
+                            {% if profile.instagram %}
+                                <a href="{{ profile.instagram }}" target="_blank" class="btn btn-default btn-lg" title="Instagram" style="margin: 5px;"><i class="fab fa-instagram"></i></a>
+                            {% endif %}
+                            {% if profile.facebook %}
+                                <a href="{{ profile.facebook }}" target="_blank" class="btn btn-default btn-lg" title="Facebook" style="margin: 5px;"><i class="fab fa-facebook"></i></a>
+                            {% endif %}
+                            {% if profile.threads %}
+                                <a href="{{ profile.threads }}" target="_blank" class="btn btn-default btn-lg" title="Threads" style="margin: 5px;"><i class="fab fa-threads"></i></a>
+                            {% endif %}
+                            {% if profile.bluesky %}
+                                <a href="{{ profile.bluesky }}" target="_blank" class="btn btn-default btn-lg" title="Bluesky" style="margin: 5px;"><i class="fas fa-cloud"></i></a>
+                            {% endif %}
+                            {% if profile.mastodon %}
+                                <a href="{{ profile.mastodon }}" target="_blank" class="btn btn-default btn-lg" title="Mastodon" style="margin: 5px;"><i class="fab fa-mastodon"></i></a>
+                            {% endif %}
+                            {% if profile.x %}
+                                <a href="{{ profile.x }}" target="_blank" class="btn btn-default btn-lg" title="X" style="margin: 5px;"><i class="fab fa-x-twitter"></i></a>
+                            {% endif %}
+                            {% if profile.linkedin %}
+                                <a href="{{ profile.linkedin }}" target="_blank" class="btn btn-default btn-lg" title="LinkedIn" style="margin: 5px;"><i class="fab fa-linkedin"></i></a>
+                            {% endif %}
+                            {% if profile.youtube %}
+                                <a href="{{ profile.youtube }}" target="_blank" class="btn btn-default btn-lg" title="YouTube" style="margin: 5px;"><i class="fab fa-youtube"></i></a>
+                            {% endif %}
+                            {% if profile.tiktok %}
+                                <a href="{{ profile.tiktok }}" target="_blank" class="btn btn-default btn-lg" title="TikTok" style="margin: 5px;"><i class="fab fa-tiktok"></i></a>
+                            {% endif %}
+                        </div>
+                        
+                        {% if profile.kofi %}
+                            <hr>
+                            <a href="{{ profile.kofi }}" target="_blank" class="btn btn-primary btn-lg" style="background-color: #29abe0; border-color: #29abe0; margin-top: 10px;">
+                                <i class="fas fa-coffee"></i> Support me on Ko-fi
+                            </a>
+                        {% endif %}
+                        
+                    {% else %}
+                        <p>Profile not set up yet. Please configure it in the Admin panel.</p>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

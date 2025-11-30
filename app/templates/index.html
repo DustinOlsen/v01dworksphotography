@@ -1,0 +1,131 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <h1>Latest Photos</h1>
+    {% for post in posts %}
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h3 class="panel-title">{{ post.title }}</h3>
+            </div>
+            <div class="panel-body">
+                <p>{{ post.body }}</p>
+                
+                {% if post.image_filename %}
+                <div class="row" style="margin-bottom: 20px;">
+                    <div class="col-md-12">
+                        <img src="{{ url_for('uploaded_file', filename=post.image_filename) }}" class="img-responsive" style="width: 100%;">
+                    </div>
+                </div>
+                {% endif %}
+
+                {% if post.photos.count() > 0 %}
+                <div id="carousel-post-{{ post.id }}" class="carousel slide" data-ride="carousel" data-interval="false">
+                    <!-- Indicators -->
+                    <ol class="carousel-indicators">
+                        {% for photo in post.photos %}
+                        <li data-target="#carousel-post-{{ post.id }}" data-slide-to="{{ loop.index0 }}" class="{% if loop.first %}active{% endif %}"></li>
+                        {% endfor %}
+                    </ol>
+
+                    <!-- Wrapper for slides -->
+                    <div class="carousel-inner" role="listbox">
+                        {% for photo in post.photos %}
+                        <div class="item {% if loop.first %}active{% endif %}">
+                            <div class="row" style="min-height: 400px;">
+                                <div class="col-md-8">
+                                    <a href="#" class="open-modal" data-post-id="{{ post.id }}" data-slide-index="{{ loop.index0 }}">
+                                        <img src="{{ url_for('uploaded_file', filename=photo.image_filename) }}" class="img-responsive" style="width: 100%; margin: 0 auto; cursor: pointer;">
+                                    </a>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="panel panel-info">
+                                        <div class="panel-heading">
+                                            <h3 class="panel-title">Photo Details</h3>
+                                        </div>
+                                        <div class="panel-body">
+                                            <ul class="list-unstyled">
+                                                {% if photo.date_taken %}<li><strong>Date:</strong> {{ photo.date_taken.strftime('%Y-%m-%d %H:%M') }}</li>{% endif %}
+                                                {% if photo.location %}<li><strong>Location:</strong> {{ photo.location }}</li>{% endif %}
+                                                {% if photo.camera_model %}<li><strong>Camera:</strong> {{ photo.camera_make }} {{ photo.camera_model }}</li>{% endif %}
+                                                {% if photo.lens %}<li><strong>Lens:</strong> {{ photo.lens }}</li>{% endif %}
+                                                {% if photo.focal_length %}<li><strong>Focal Length:</strong> {{ photo.focal_length }}</li>{% endif %}
+                                                {% if photo.aperture %}<li><strong>Aperture:</strong> {{ photo.aperture }}</li>{% endif %}
+                                                {% if photo.shutter_speed %}<li><strong>Shutter:</strong> {{ photo.shutter_speed }}</li>{% endif %}
+                                                {% if photo.iso %}<li><strong>ISO:</strong> {{ photo.iso }}</li>{% endif %}
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
+
+                    <!-- Controls -->
+                    <a class="left carousel-control" href="#carousel-post-{{ post.id }}" role="button" data-slide="prev" style="background-image: none; color: #333; width: 5%;">
+                        <span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span>
+                        <span class="sr-only">Previous</span>
+                    </a>
+                    <a class="right carousel-control" href="#carousel-post-{{ post.id }}" role="button" data-slide="next" style="background-image: none; color: #333; width: 5%;">
+                        <span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span>
+                        <span class="sr-only">Next</span>
+                    </a>
+                </div>
+
+                <!-- Modal -->
+                <div class="modal fade" id="modal-post-{{ post.id }}" tabindex="-1" role="dialog" aria-labelledby="modalLabel{{ post.id }}">
+                  <div class="modal-dialog modal-lg" role="document" style="width: 95%; height: 95%;">
+                    <div class="modal-content" style="height: 100%; background-color: transparent; box-shadow: none; border: none;">
+                      <div class="modal-body" style="height: 100%; padding: 0;">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close" style="position: absolute; right: 20px; top: 20px; z-index: 1000; color: white; opacity: 0.8; font-size: 30px;">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                        
+                        <div id="modal-carousel-post-{{ post.id }}" class="carousel slide" data-ride="carousel" data-interval="false" style="height: 100%;">
+                            <!-- Wrapper for slides -->
+                            <div class="carousel-inner" role="listbox" style="height: 100%;">
+                                {% for photo in post.photos %}
+                                <div class="item {% if loop.first %}active{% endif %}" style="height: 100%;">
+                                    <div style="display: flex; align-items: center; justify-content: center; height: 100%;">
+                                        <img src="{{ url_for('uploaded_file', filename=photo.image_filename) }}" style="max-width: 100%; max-height: 100vh; width: auto; height: auto;">
+                                    </div>
+                                </div>
+                                {% endfor %}
+                            </div>
+
+                            <!-- Controls -->
+                            <a class="left carousel-control" href="#modal-carousel-post-{{ post.id }}" role="button" data-slide="prev">
+                                <span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span>
+                                <span class="sr-only">Previous</span>
+                            </a>
+                            <a class="right carousel-control" href="#modal-carousel-post-{{ post.id }}" role="button" data-slide="next">
+                                <span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span>
+                                <span class="sr-only">Next</span>
+                            </a>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                {% endif %}
+                
+                <p><small class="text-muted">Posted on {{ post.timestamp.strftime('%Y-%m-%d') }}</small></p>
+            </div>
+        </div>
+    {% endfor %}
+{% endblock %}
+
+{% block scripts %}
+<script>
+    $(document).ready(function() {
+        $('.open-modal').click(function(e) {
+            e.preventDefault();
+            var postId = $(this).data('post-id');
+            var slideIndex = $(this).data('slide-index');
+            
+            $('#modal-carousel-post-' + postId).carousel(slideIndex);
+            $('#modal-post-' + postId).modal('show');
+        });
+    });
+</script>
+{% endblock %}
