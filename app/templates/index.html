@@ -31,7 +31,7 @@
                         {% for photo in post.photos %}
                         {% set has_details = photo.date_taken or photo.location or photo.camera_model or photo.lens or photo.focal_length or photo.aperture or photo.shutter_speed or photo.iso %}
                         <div class="item {% if loop.first %}active{% endif %}">
-                            <div class="row" style="min-height: 400px;">
+                            <div class="row">
                                 <div class="{% if has_details %}col-md-8{% else %}col-md-12{% endif %}">
                                     <a href="#" class="open-modal" data-post-id="{{ post.id }}" data-slide-index="{{ loop.index0 }}">
                                         <img src="{{ url_for('uploaded_file', filename=photo.image_filename) }}" class="img-responsive" style="width: 100%; margin: 0 auto; cursor: pointer;">
