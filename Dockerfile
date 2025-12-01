@@ -7,8 +7,8 @@ RUN pip install --no-cache-dir -r requirements.txt
 
 COPY . .
 
-# Create the upload directory if it doesn't exist
-RUN mkdir -p app/static/uploads
+# Create the upload directory and instance folder if they don't exist
+RUN mkdir -p app/static/uploads instance
 
 # Expose the port
 EXPOSE 8000
