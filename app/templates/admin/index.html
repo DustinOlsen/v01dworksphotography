@@ -14,7 +14,9 @@
                 {% for post in dashboard_posts %}
                 <div class="list-group-item">
                     <h4 class="list-group-item-heading">{{ post.title }} <small>{{ post.timestamp.strftime('%Y-%m-%d') }}</small></h4>
+                    {% if post.body %}
                     <p class="list-group-item-text">{{ post.body[:200] }}...</p>
+                    {% endif %}
                     <br>
                     {% if post.image_filename %}
                     <img src="{{ url_for('uploaded_file', filename=post.image_filename) }}" style="height: 50px;">
