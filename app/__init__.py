@@ -23,6 +23,6 @@ login = LoginManager(app)
 login.login_view = 'login'
 
 # Initialize Admin (we will add views in routes or a separate file, but let's init here)
-admin = Admin(app, name='Photography Blog', url='/')
+admin = Admin(app, name='Photography Blog')
 
 from app import routes, models
