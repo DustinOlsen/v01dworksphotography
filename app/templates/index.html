@@ -129,6 +129,37 @@
             $('#modal-carousel-post-' + postId).carousel(slideIndex);
             $('#modal-post-' + postId).modal('show');
         });
+
+        // Swipe support for carousels
+        var touchStartX = 0;
+        var touchStartY = 0;
+        var touchEndX = 0;
+        var touchEndY = 0;
+
+        $('.carousel').on('touchstart', function(event) {
+            touchStartX = event.originalEvent.changedTouches[0].screenX;
+            touchStartY = event.originalEvent.changedTouches[0].screenY;
+        });
+
+        $('.carousel').on('touchend', function(event) {
+            touchEndX = event.originalEvent.changedTouches[0].screenX;
+            touchEndY = event.originalEvent.changedTouches[0].screenY;
+            handleSwipe(this);
+        });
+
+        function handleSwipe(carousel) {
+            var xDiff = touchStartX - touchEndX;
+            var yDiff = touchStartY - touchEndY;
+
+            // If horizontal movement is significant and vertical movement is small
+            if (Math.abs(xDiff) > 50 && Math.abs(yDiff) < 50) {
+                if (xDiff > 0) {
+                    $(carousel).carousel('next');
+                } else {
+                    $(carousel).carousel('prev');
+                }
+            }
+        }
     });
 </script>
 {% endblock %}
