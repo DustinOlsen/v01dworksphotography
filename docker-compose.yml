@@ -1,0 +1,15 @@
+version: '3.8'
+
+services:
+  web:
+    build: .
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./app.db:/app/app.db
+      - ./app/static/uploads:/app/app/static/uploads
+    environment:
+      - SECRET_KEY=${SECRET_KEY}
+      - FLASK_APP=run.py
+      - FLASK_DEBUG=0
+    restart: unless-stopped

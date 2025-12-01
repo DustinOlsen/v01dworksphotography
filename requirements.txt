@@ -4,3 +4,7 @@ Flask-Login
 Flask-Admin
 Flask-Migrate
 python-dotenv
+gunicorn
+Pillow
+geopy
+pillow-heif
