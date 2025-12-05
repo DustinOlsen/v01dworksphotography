@@ -50,6 +50,21 @@
         </div>
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
         <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+        <script>
+            // Custom Analytics
+            document.addEventListener("DOMContentLoaded", function() {
+                fetch('https://api.v01dworks.com/track', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        path: window.location.pathname,
+                        site_id: 'v01dworks-photography'
+                    }),
+                }).catch(error => console.error('Analytics Error:', error));
+            });
+        </script>
         {% block scripts %}{% endblock %}
     </body>
 </html>
