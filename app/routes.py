@@ -1,6 +1,8 @@
 import os
+import requests
 from flask import render_template, flash, redirect, url_for, request, send_from_directory
 from flask_login import current_user, login_user, logout_user, login_required
+from flask_admin import BaseView, expose
 from flask_admin.contrib.sqla import ModelView
 from flask_admin.form.upload import ImageUploadField
 from flask_admin.model.form import InlineFormAdmin
@@ -122,6 +124,29 @@ class PostView(SecureModelView):
         if metadata_updated:
             db.session.commit()
 
+class AnalyticsView(BaseView):
+    @expose('/')
+    def index(self):
+        if not current_user.is_authenticated:
+            return redirect(url_for('login'))
+            
+        try:
+            # Use a timeout to prevent hanging if the API is down
+            response = requests.get('https://analytics.v01dworks.com/stats?site_id=v01dworks-photography', timeout=5)
+            if response.status_code == 200:
+                stats = response.json()
+                return self.render('admin/analytics.html', stats=stats)
+            else:
+                return self.render('admin/analytics.html', error=f"Error fetching stats: {response.status_code}")
+        except Exception as e:
+            return self.render('admin/analytics.html', error=f"Error connecting to analytics API: {str(e)}")
+            
+    def is_accessible(self):
+        return current_user.is_authenticated
+
+    def inaccessible_callback(self, name, **kwargs):
+        return redirect(url_for('login'))
+
 class ProfileView(SecureModelView):
     form_overrides = dict(image_filename=ImageUploadField)
     form_args = dict(image_filename=dict(
@@ -133,6 +158,7 @@ class ProfileView(SecureModelView):
 admin.add_view(SecureModelView(User, db.session))
 admin.add_view(PostView(Post, db.session))
 admin.add_view(ProfileView(Profile, db.session))
+admin.add_view(AnalyticsView(name='Analytics', endpoint='analytics'))
 
 @app.route('/')
 @app.route('/index')

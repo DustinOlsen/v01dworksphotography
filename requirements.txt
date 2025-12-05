@@ -8,3 +8,4 @@ gunicorn
 Pillow
 geopy
 pillow-heif
+requests
