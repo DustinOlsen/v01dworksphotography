@@ -9,3 +9,5 @@ app/static/uploads/*
 .DS_Store
 .vscode/
 *.log
+
+API_DOCUMENTATION.md
