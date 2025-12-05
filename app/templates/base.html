@@ -53,16 +53,27 @@
         <script>
             // Custom Analytics
             document.addEventListener("DOMContentLoaded", function() {
+                var data = {
+                    path: window.location.pathname,
+                    site_id: 'v01dworks-photography'
+                };
+                
+                console.log('Analytics: Sending data', data);
+
                 fetch('https://api.v01dworks.com/track', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
                     },
-                    body: JSON.stringify({
-                        path: window.location.pathname,
-                        site_id: 'v01dworks-photography'
-                    }),
-                }).catch(error => console.error('Analytics Error:', error));
+                    body: JSON.stringify(data),
+                    keepalive: true
+                })
+                .then(response => {
+                    console.log('Analytics: Response status', response.status);
+                    return response.json();
+                })
+                .then(data => console.log('Analytics: Response data', data))
+                .catch(error => console.error('Analytics: Error', error));
             });
         </script>
         {% block scripts %}{% endblock %}
