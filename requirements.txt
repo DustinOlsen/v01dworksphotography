@@ -9,3 +9,4 @@ Pillow
 geopy
 pillow-heif
 requests
+cryptography

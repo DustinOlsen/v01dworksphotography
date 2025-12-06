@@ -1,5 +1,8 @@
 import os
 import requests
+import time
+from cryptography.hazmat.primitives.asymmetric import ed25519
+from cryptography.hazmat.primitives import serialization
 from flask import render_template, flash, redirect, url_for, request, send_from_directory
 from flask_login import current_user, login_user, logout_user, login_required
 from flask_admin import BaseView, expose
@@ -131,16 +134,81 @@ class AnalyticsView(BaseView):
             return redirect(url_for('login'))
             
         try:
+            # Check if we have a private key stored (in a real app, store this securely in DB or env)
+            # For this demo, we'll check if a key file exists
+            key_path = os.path.join(app.instance_path, 'analytics_key.pem')
+            headers = {}
+            
+            if os.path.exists(key_path):
+                with open(key_path, 'rb') as f:
+                    private_key_bytes = f.read()
+                    private_key = ed25519.Ed25519PrivateKey.from_private_bytes(private_key_bytes)
+                    
+                    timestamp = int(time.time())
+                    site_id = 'v01dworks-photography'
+                    message = f"{site_id}:{timestamp}".encode()
+                    signature = private_key.sign(message).hex()
+                    
+                    headers = {
+                        "X-Timestamp": str(timestamp),
+                        "X-Signature": signature
+                    }
+
             # Use a timeout to prevent hanging if the API is down
-            response = requests.get('https://analytics.v01dworks.com/stats?site_id=v01dworks-photography', timeout=5)
+            response = requests.get('https://analytics.v01dworks.com/stats?site_id=v01dworks-photography', headers=headers, timeout=5)
+            
             if response.status_code == 200:
                 stats = response.json()
                 return self.render('admin/analytics.html', stats=stats)
+            elif response.status_code == 401:
+                 return self.render('admin/analytics.html', error="Authentication Failed. Please pair with the server.")
             else:
                 return self.render('admin/analytics.html', error=f"Error fetching stats: {response.status_code}")
         except Exception as e:
             return self.render('admin/analytics.html', error=f"Error connecting to analytics API: {str(e)}")
+
+    @expose('/pair')
+    def pair(self):
+        if not current_user.is_authenticated:
+            return redirect(url_for('login'))
             
+        # Generate new key pair
+        private_key = ed25519.Ed25519PrivateKey.generate()
+        public_key = private_key.public_key()
+        
+        # Save private key
+        key_path = os.path.join(app.instance_path, 'analytics_key.pem')
+        with open(key_path, 'wb') as f:
+            f.write(private_key.private_bytes(
+                encoding=serialization.Encoding.Raw,
+                format=serialization.PrivateFormat.Raw,
+                encryption_algorithm=serialization.NoEncryption()
+            ))
+            
+        # Register public key
+        public_hex = public_key.public_bytes(
+            encoding=serialization.Encoding.Raw,
+            format=serialization.PublicFormat.Raw
+        ).hex()
+        
+        try:
+            requests.post('https://analytics.v01dworks.com/register-key', json={
+                "site_id": "v01dworks-photography",
+                "public_key_hex": public_hex
+            })
+            flash('Successfully paired with Analytics Server!')
+        except Exception as e:
+            flash(f'Failed to register key: {e}')
+            
+        return redirect(url_for('analytics.index'))
+
+    @expose('/qr')
+    def qr_code(self):
+        if not current_user.is_authenticated:
+            return redirect(url_for('login'))
+        # Redirect to the API's QR code page
+        return redirect('https://analytics.v01dworks.com/pair/v01dworks-photography')
+
     def is_accessible(self):
         return current_user.is_authenticated
 

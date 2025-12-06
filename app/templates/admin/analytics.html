@@ -5,6 +5,10 @@
     <div class="row">
         <div class="col-md-12">
             <h1>Analytics Dashboard</h1>
+            <div class="pull-right">
+                <a href="{{ url_for('analytics.pair') }}" class="btn btn-primary">Pair with Server</a>
+                <a href="{{ url_for('analytics.qr_code') }}" class="btn btn-info" target="_blank">Show Pairing QR Code</a>
+            </div>
             <hr>
         </div>
     </div>

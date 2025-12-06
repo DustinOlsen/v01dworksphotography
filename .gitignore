@@ -11,3 +11,4 @@ app/static/uploads/*
 *.log
 
 API_DOCUMENTATION.md
+AUTH_GUIDE.md
