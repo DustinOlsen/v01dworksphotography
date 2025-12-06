@@ -157,13 +157,15 @@ class AnalyticsView(BaseView):
             # Use a timeout to prevent hanging if the API is down
             response = requests.get('https://analytics.v01dworks.com/stats?site_id=v01dworks-photography', headers=headers, timeout=5)
             
+            is_paired = os.path.exists(key_path)
+
             if response.status_code == 200:
                 stats = response.json()
-                return self.render('admin/analytics.html', stats=stats)
+                return self.render('admin/analytics.html', stats=stats, is_paired=is_paired)
             elif response.status_code == 401:
-                 return self.render('admin/analytics.html', error="Authentication Failed. Please pair with the server.")
+                 return self.render('admin/analytics.html', error="Authentication Failed. Please pair with the server.", is_paired=is_paired)
             else:
-                return self.render('admin/analytics.html', error=f"Error fetching stats: {response.status_code}")
+                return self.render('admin/analytics.html', error=f"Error fetching stats: {response.status_code}", is_paired=is_paired)
         except Exception as e:
             return self.render('admin/analytics.html', error=f"Error connecting to analytics API: {str(e)}")
 
